@@ -1,5 +1,9 @@
 # Мини-CRM «Объекты и задачи»
 
+[![CI](https://github.com/1lk1n/mini-crm-objects-tasks/actions/workflows/ci.yml/badge.svg)](https://github.com/1lk1n/mini-crm-objects-tasks/actions/workflows/ci.yml)
+
+**Демо:** https://mini-crm-objects-tasks-navy.vercel.app (доступы: постановщик и два исполнителя, переданы в сообщении на hh.ru)
+
 Небольшая CRM для строительной компании: постановщик ведёт объекты (стройки) и ставит по ним задачи, исполнители берут задачи в работу и отдают на проверку. У каждой задачи есть цикл статусов и неизменяемая история.
 
 **Стек:** React 19 + TypeScript + Vite, Supabase (Postgres, Auth, RLS), Mantine UI, TanStack Query.

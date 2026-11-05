@@ -36,3 +36,6 @@ supabase/.branches
 # Personal notes / original assignment, not part of the repo
 _private/
 *.pdf
+
+# Vercel CLI project link
+.vercel
