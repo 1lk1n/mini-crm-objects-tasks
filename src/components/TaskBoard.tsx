@@ -170,24 +170,20 @@ function Column(props: { status: TaskStatus; count: number; myMoves: number; sta
         transition: 'opacity 120ms, background-color 120ms',
       }}
     >
-      <Group justify="space-between" mb="xs" px={4} wrap="nowrap">
-        <Group gap={8} wrap="nowrap">
+      <Group justify="space-between" px={4} wrap="nowrap" gap={6}>
+        <Group gap={8} wrap="nowrap" style={{ minWidth: 0 }}>
           <Box w={10} h={10} style={{ borderRadius: '50%', background: `var(--mantine-color-${color}-6)`, flexShrink: 0 }} />
-          <Text fw={600} size="sm">
+          <Text fw={600} size="sm" truncate>
             {STATUS_LABEL[status]}
           </Text>
         </Group>
-        <Group gap={4} wrap="nowrap">
-          {myMoves > 0 && (
-            <Badge size="xs" color={color} variant="filled" title="Задачи, по которым вы можете сделать следующий шаг">
-              ваш ход: {myMoves}
-            </Badge>
-          )}
-          <Badge size="sm" color="gray" variant="light">
-            {count}
-          </Badge>
-        </Group>
+        <Badge size="sm" color="gray" variant="light" style={{ flexShrink: 0 }}>
+          {count}
+        </Badge>
       </Group>
+      <Text size="xs" px={4} mb="xs" mt={2} fw={500} c={myMoves > 0 ? `${color}.7` : 'transparent'} title="Задачи, по которым вы можете сделать следующий шаг">
+        {myMoves > 0 ? `Ваш ход: ${myMoves}` : '\u00a0'}
+      </Text>
       <Stack gap="xs">
         {allowed && (
           <Text size="xs" ta="center" py={6} c={`${color}.8`} fw={500}>
