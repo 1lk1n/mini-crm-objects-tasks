@@ -1,13 +1,17 @@
 import { useState } from 'react'
-import { Anchor, Breadcrumbs, Button, Group, Paper, Stack, Table, Text, Title } from '@mantine/core'
+import { Anchor, Breadcrumbs, Button, Group, Paper, Stack, Text, Title } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useMe } from '../auth/context'
-import { useDeleteObject, useObject, useObjectTasks, useProfiles } from '../lib/api'
-import { EmptyText, ErrorAlert, NotFound, PageLoader, StatusBadge } from '../components/common'
-import { formatDate, notifyError, notifySuccess } from '../lib/ui'
+import { useDeleteObject, useObject, useObjectTasks } from '../lib/api'
+import { notifyError, notifySuccess } from '../lib/ui'
+import { useViewMode } from '../lib/viewMode'
+import { EmptyText, ErrorAlert, NotFound, PageLoader } from '../components/common'
 import { ObjectFormModal } from '../components/ObjectFormModal'
+import { TaskBoard } from '../components/TaskBoard'
 import { TaskFormModal } from '../components/TaskFormModal'
+import { TaskTable } from '../components/TaskTable'
+import { ViewToggle } from '../components/ViewToggle'
 
 export function ObjectPage() {
   const { objectId = '' } = useParams()
@@ -16,7 +20,7 @@ export function ObjectPage() {
   const navigate = useNavigate()
   const object = useObject(objectId)
   const tasks = useObjectTasks(objectId)
-  const profiles = useProfiles()
+  const [view, setView] = useViewMode()
   const deleteObject = useDeleteObject()
   const [editing, setEditing] = useState(false)
   const [creatingTask, setCreatingTask] = useState(false)
@@ -76,7 +80,10 @@ export function ObjectPage() {
 
       <Group justify="space-between">
         <Title order={3}>{isManager ? 'Задачи' : 'Мои задачи на объекте'}</Title>
-        {isManager && <Button onClick={() => setCreatingTask(true)}>Новая задача</Button>}
+        <Group gap="sm">
+          <ViewToggle value={view} onChange={setView} />
+          {isManager && <Button onClick={() => setCreatingTask(true)}>Новая задача</Button>}
+        </Group>
       </Group>
 
       {tasks.isPending ? (
@@ -85,37 +92,10 @@ export function ObjectPage() {
         <ErrorAlert error={tasks.error} />
       ) : tasks.data.length === 0 ? (
         <EmptyText>Задач пока нет</EmptyText>
+      ) : view === 'board' ? (
+        <TaskBoard tasks={tasks.data} showAssignee={isManager} />
       ) : (
-        <Paper withBorder>
-          <Table.ScrollContainer minWidth={600}>
-            <Table highlightOnHover verticalSpacing="sm">
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>Задача</Table.Th>
-                  <Table.Th>Исполнитель</Table.Th>
-                  <Table.Th>Статус</Table.Th>
-                  <Table.Th>Создана</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
-                {tasks.data.map((t) => (
-                  <Table.Tr key={t.id}>
-                    <Table.Td>
-                      <Anchor component={Link} to={`/tasks/${t.id}`} fw={500}>
-                        {t.title}
-                      </Anchor>
-                    </Table.Td>
-                    <Table.Td>{profiles.data?.byId.get(t.assignee_id)?.full_name ?? '—'}</Table.Td>
-                    <Table.Td>
-                      <StatusBadge status={t.status} />
-                    </Table.Td>
-                    <Table.Td>{formatDate(t.created_at)}</Table.Td>
-                  </Table.Tr>
-                ))}
-              </Table.Tbody>
-            </Table>
-          </Table.ScrollContainer>
-        </Paper>
+        <TaskTable tasks={tasks.data} showAssignee={isManager} />
       )}
 
       <ObjectFormModal opened={editing} onClose={() => setEditing(false)} object={o} />

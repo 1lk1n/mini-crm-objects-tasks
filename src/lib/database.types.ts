@@ -169,3 +169,5 @@ export type CrmObject = PublicTables['objects']['Row']
 export type Task = PublicTables['tasks']['Row']
 export type StatusTransition = PublicTables['task_status_transitions']['Row']
 export type StatusHistoryEntry = PublicTables['task_status_history']['Row']
+/** Task as shown in lists/boards, optionally with its object embedded. */
+export type TaskRow = Task & { object?: Pick<CrmObject, 'id' | 'name'> | null }

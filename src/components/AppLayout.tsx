@@ -23,7 +23,7 @@ export function AppLayout() {
   return (
     <AppShell header={{ height: 60 }} padding="md">
       <AppShell.Header>
-        <Container size="lg" h="100%">
+        <Container size="xl" h="100%">
           <Group h="100%" justify="space-between" wrap="nowrap">
             <Group gap="xs" wrap="nowrap">
               <Text fw={700} mr="sm" visibleFrom="xs">
@@ -51,7 +51,7 @@ export function AppLayout() {
         </Container>
       </AppShell.Header>
       <AppShell.Main>
-        <Container size="lg">
+        <Container size="xl">
           <Outlet />
         </Container>
       </AppShell.Main>

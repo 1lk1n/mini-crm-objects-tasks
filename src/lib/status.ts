@@ -16,7 +16,9 @@ export const STATUS_COLOR: Record<TaskStatus, string> = {
   rework: 'red',
 }
 
-export const STATUS_ORDER: TaskStatus[] = ['new', 'in_progress', 'review', 'rework', 'accepted']
+// Board column order. "Rework" sits next to "New": both wait for the executor
+// to (re)start, so forward moves go right and "return to rework" goes left.
+export const STATUS_ORDER: TaskStatus[] = ['new', 'rework', 'in_progress', 'review', 'accepted']
 
 // Button labels for transitions; the transitions themselves come from the DB.
 const ACTION_LABEL: Partial<Record<`${TaskStatus}->${TaskStatus}`, string>> = {
